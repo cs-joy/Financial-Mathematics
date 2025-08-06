@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import java.util.concurrent.ForkJoinPool;
 
 public class ApplicationController {
     @FXML private TextField input1;
@@ -15,33 +16,40 @@ public class ApplicationController {
     @FXML private Button calculateButton;
     @FXML private Text resultText;
 
+    private static final ForkJoinPool pool = new ForkJoinPool();
+
     @FXML
     public void initialize() {
-
+        //
     }
 
     @FXML
     private void handleCalculate() {
-        // Example calculation - sum all numeric inputs
-        try {
-            double sum = 0;
-            sum += parseDouble(input1.getText());
-            sum += parseDouble(input2.getText());
-            sum += parseDouble(input3.getText());
-            sum += parseDouble(input4.getText());
-            sum += parseDouble(input5.getText());
-            sum += parseDouble(input6.getText());
+        int N = Integer.parseInt(input4.getText());
+        double K = Double.parseDouble(input2.getText());
+        double S0 = Double.parseDouble(input1.getText());
+        double r = Double.parseDouble(input3.getText());
 
-            resultText.setText(String.format("Calculation Result: %.2f", sum));
-        } catch (NumberFormatException e) {
-            resultText.setText("Please enter valid numbers in all fields");
-        }
-    }
+        input5.setText("1.0/365, note: daily");
+        input5.setDisable(true);
+        double h = 1.0/365;
 
-    private double parseDouble(String text) {
-        if (text == null || text.trim().isEmpty()) {
-            return 0;
-        }
-        return Double.parseDouble(text.trim());
+        double sigma = Double.parseDouble(input6.getText());;
+
+        double u = sigma * Math.sqrt(3 * h);
+        double p = 1.0/6;
+
+        OptimizedAmericanPutTrinomial.calculateAmericanPut(S0, K, r, 10, p, h, u, sigma);
+
+        long startTime = System.nanoTime();
+        double optionPrice = OptimizedAmericanPutTrinomial.calculateAmericanPut(S0, K, r, N, p, h, u, sigma);
+        long endTime = System.nanoTime();
+
+        resultText.setText(String.format("American Put Option Price: %.4f%n", optionPrice));
+
+        System.out.printf("American Put Option Price: %.4f%n", optionPrice);
+        System.out.printf("Execution time: %.3f ms%n", (endTime - startTime)/1e6);
+
+        pool.shutdown();
     }
 }
