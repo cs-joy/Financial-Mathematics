@@ -35,7 +35,6 @@ public class European {
             ArrayHolder(double[] values) { this.values = values; }
         }
         ArrayHolder holder = new ArrayHolder(new double[2 * N + 1]);
-        //final double[] optionValues = new double[2 * N + 1];
 
         // Initialize option values at maturity
         IntStream.range(0, 2 * N + 1).parallel().forEach(i -> {

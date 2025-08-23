@@ -8,7 +8,7 @@
 <?import java.lang.String?>
 
 <GridPane xmlns="http://javafx.com/javafx/17" stylesheets="@../css/styles.css" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.bsc.thesis.ApplicationController"
+          fx:controller="com.bsc.thesis.OldApplicationController"
           prefHeight="600" prefWidth="800"
           hgap="10" vgap="10"
           alignment="CENTER">

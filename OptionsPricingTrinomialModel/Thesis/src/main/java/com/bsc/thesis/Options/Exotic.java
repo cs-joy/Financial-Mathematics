@@ -314,7 +314,7 @@ public class Exotic {
         return vanilla - downOut;
     }
 
-    private static double calculateBarrierOption(double S0, double K, double barrier,
+    public static double calculateBarrierOption(double S0, double K, double barrier,
                                                  double r, int N, double h, double u, double sigma,
                                                  boolean isCall, boolean isDown, boolean isOut) {
         double p = Math.exp(-sigma * sigma * h / 2);

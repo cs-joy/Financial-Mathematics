@@ -1,0 +1,16 @@
+=== OPTION PRICING RESULTS ===
+
+Option Type: Asian Option
+Calculation Method: Asian Arithmetic Average (Trinomial Tree)
+
+Input Parameters:
+  Stock Price (S0): 100.0000
+  Strike Price (K): 100.0000
+  Risk-free Rate (r): 5.00%
+  Volatility (σ): 20.00%
+  Time to Maturity (T): 1.0000 years
+  Number of Steps (N): 100
+
+Calculated Option Price: 4,188,347,009,573,122,000,000,000,000,000,000,000,000,000,000.0000
+
+Calculation Time: 2025-08-23 12:53:43
