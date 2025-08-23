@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<GridPane xmlns="http://javafx.com/javafx/17" stylesheets="@../css/styles.css" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.bsc.thesis.ApplicationController"
+          prefHeight="600" prefWidth="800"
+          hgap="10" vgap="10"
+          alignment="CENTER">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="300"/>
+    </columnConstraints>
+    
+
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES" minHeight="30"/>
+        <RowConstraints vgrow="SOMETIMES" minHeight="30"/>
+        <RowConstraints vgrow="SOMETIMES" minHeight="30"/>
+        <RowConstraints vgrow="SOMETIMES" minHeight="30"/>
+        <RowConstraints vgrow="SOMETIMES" minHeight="30"/>
+        <RowConstraints vgrow="SOMETIMES" minHeight="30"/>
+        <RowConstraints vgrow="SOMETIMES" minHeight="50"/>
+        <RowConstraints vgrow="ALWAYS" minHeight="100"/>
+    </rowConstraints>
+
+    <Text text="Initial Stock Price (S0):" GridPane.columnIndex="0" GridPane.rowIndex="0"
+          styleClass="input-label"/>
+    <TextField fx:id="input1" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+    
+    <Text text="Strike Price              (K):" GridPane.columnIndex="0" GridPane.rowIndex="1"
+          styleClass="input-label"/>
+    <TextField fx:id="input2" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    
+    <Text text="Risk-free Rate          (r):" GridPane.columnIndex="0" GridPane.rowIndex="2"
+          styleClass="input-label"/>
+    <TextField fx:id="input3" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    
+    <Text text="Number of Steps   (N):" GridPane.columnIndex="0" GridPane.rowIndex="3"
+          styleClass="input-label"/>
+    <TextField fx:id="input4" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    
+    <Text text="Time Step Size         (h):" GridPane.columnIndex="0" GridPane.rowIndex="4"
+          styleClass="input-label"/>
+    <TextField fx:id="input5" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    
+    <Text text="Volatility                   (σ):" GridPane.columnIndex="0" GridPane.rowIndex="5"
+          styleClass="input-label"/>
+    <TextField fx:id="input6" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+    <Button text="Calculate" fx:id="calculateButton"
+            GridPane.columnIndex="0" GridPane.rowIndex="6" 
+            GridPane.columnSpan="2"
+            maxWidth="Infinity"
+            onAction="#handleCalculate"
+            styleClass="action-button"/>
+
+    <Text fx:id="resultText" text="Results will appear here..." 
+          GridPane.columnIndex="0" GridPane.rowIndex="7" 
+          GridPane.columnSpan="2"
+          styleClass="result-text"/>
+
+</GridPane>
