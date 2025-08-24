@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" stylesheets="@../css/styles.css" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bsc.thesis.ApplicationController"
+            prefHeight="800" prefWidth="1200">
+
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox styleClass="nav-bar" spacing="20" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Logo/Brand -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <ImageView fitWidth="32" fitHeight="32" preserveRatio="true">
+                    <Image url="@../images/logo.png"/>
+                </ImageView>
+                <Text text="QuantOptions" styleClass="brand-text"/>
+            </HBox>
+
+            <HBox spacing="20" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <Button text="Home" styleClass="nav-button"/>
+                <Button text="Pricing" styleClass="nav-button"/>
+                <Button text="Documentation" styleClass="nav-button"/>
+                <Button text="Support" styleClass="nav-button"/>
+            </HBox>
+
+            <!-- Auth Buttons -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Sign In" styleClass="auth-button secondary" onAction="#handleSignIn"/>
+                <Button text="Sign Up" styleClass="auth-button primary" onAction="#handleSignUp"/>
+                <Button fx:id="subscriptionButton" text="Subscribe" styleClass="auth-button premium" visible="false" onAction="#handleSubscription"/>
+                <Button fx:id="profileButton" text="Profile" styleClass="auth-button" visible="false" onAction="#handleProfile"/>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="main-scroll">
+            <VBox spacing="0" styleClass="main-container">
+
+                <!-- Hero Section -->
+                <VBox styleClass="hero-section" alignment="CENTER" spacing="20">
+                    <Text text="Advanced Options Pricing Platform" styleClass="hero-title"/>
+                    <Text text="Professional-grade option pricing with real-time calculations and advanced analytics"
+                          styleClass="hero-subtitle"/>
+                    <HBox spacing="15" alignment="CENTER">
+                        <Button text="Get Started" styleClass="cta-button"/>
+                        <Button text="View Demo" styleClass="cta-button secondary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Calculator Section -->
+                <VBox styleClass="calculator-section" spacing="25">
+                    <Text text="Options Pricing Calculator" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="15" styleClass="calculator-grid">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="150" prefWidth="200"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="250" prefWidth="300"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="150" prefWidth="200"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="250" prefWidth="300"/>
+                        </columnConstraints>
+
+                        <rowConstraints>
+                            <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                            <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                            <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                            <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                            <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                            <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                            <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                        </rowConstraints>
+
+                        <!-- Column 1 -->
+                        <Text text="Option Type:" styleClass="input-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="optionTypeComboBox" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="European Call"/>
+                                    <String fx:value="European Put"/>
+                                    <String fx:value="American Call"/>
+                                    <String fx:value="American Put"/>
+                                    <String fx:value="Asian Option"/>
+                                    <String fx:value="Barrier Option"/>
+                                    <String fx:value="Cliquet Option"/>
+                                    <String fx:value="Compound Option"/>
+                                    <String fx:value="Lookback Option"/>
+                                    <String fx:value="Bermudan Option"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+
+                        <Text text="Initial Stock Price (S0):" styleClass="input-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="stockPriceField" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Text text="Strike Price (K):" styleClass="input-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="strikePriceField" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Text text="Risk-free Rate (r):" styleClass="input-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextField fx:id="riskFreeRateField" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <!-- Column 2 -->
+                        <Text text="Volatility (σ):" styleClass="input-label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                        <TextField fx:id="volatilityField" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                        <Text text="Time to Maturity (T):" styleClass="input-label" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <TextField fx:id="timeToMaturityField" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                        <Text text="Number of Steps (N):" styleClass="input-label" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                        <TextField fx:id="numStepsField" text="100" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                        <Text text="Time Step Size (h):" styleClass="input-label" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                        <TextField fx:id="timeStepField" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+
+                        <Text text="Up Factor (u):" styleClass="input-label" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                        <TextField fx:id="upFactorField" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+                    </GridPane>
+
+                    <!-- Exotic Parameters Section -->
+                    <VBox fx:id="exoticParamsContainer" styleClass="exotic-section" visible="false" managed="false" spacing="15">
+                        <Text text="Exotic Option Parameters" styleClass="subsection-title"/>
+
+                        <GridPane hgap="15" vgap="10" styleClass="exotic-grid">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="150" prefWidth="180"/>
+                                <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="250"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="150" prefWidth="180"/>
+                                <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="250"/>
+                            </columnConstraints>
+
+                            <!-- Barrier Options -->
+                            <VBox fx:id="barrierParams" visible="false" managed="false" spacing="10" GridPane.columnSpan="4">
+                                <Text text="Barrier Options" styleClass="param-group-title"/>
+                                <GridPane hgap="15" vgap="10">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="150"/>
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="150"/>
+                                        <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
+                                    </columnConstraints>
+                                    <Text text="Barrier Price:" styleClass="input-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                    <TextField fx:id="barrierPriceField" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                    <Text text="Barrier Type:" styleClass="input-label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                    <ComboBox fx:id="barrierTypeComboBox" styleClass="combo-box" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="Down-and-Out"/>
+                                                <String fx:value="Down-and-In"/>
+                                                <String fx:value="Up-and-Out"/>
+                                                <String fx:value="Up-and-In"/>
+                                            </FXCollections>
+                                        </items>
+                                    </ComboBox>
+                                </GridPane>
+                            </VBox>
+
+                            <!-- Other exotic parameters would follow similar structure -->
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Action Buttons -->
+                    <HBox spacing="20" alignment="CENTER" styleClass="action-buttons">
+                        <Button text="Calculate" fx:id="calculateButton" styleClass="action-button primary"
+                                onAction="#handleCalculate" prefWidth="140"/>
+                        <Button text="Save Results" fx:id="saveButton" styleClass="action-button secondary"
+                                onAction="#handleSave" prefWidth="140"/>
+                        <Button text="Clear Form" fx:id="clearButton" styleClass="action-button"
+                                onAction="#handleClear" prefWidth="140"/>
+                    </HBox>
+
+                    <!-- Results Section -->
+                    <VBox styleClass="results-section" spacing="10">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Text text="Results" styleClass="subsection-title"/>
+                            <Text fx:id="statusText" text="Ready" styleClass="status-text"/>
+                        </HBox>
+                        <TextArea fx:id="resultTextArea" styleClass="results-textarea" editable="false" prefHeight="200"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Features Section -->
+                <VBox styleClass="features-section" spacing="30">
+                    <Text text="Why Choose QuantOptions?" styleClass="section-title"/>
+                    <GridPane hgap="30" vgap="20">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="250" prefWidth="300"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="250" prefWidth="300"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="250" prefWidth="300"/>
+                        </columnConstraints>
+                        <VBox styleClass="feature-card" spacing="10">
+                            <Text text="⚡ Real-time Pricing" styleClass="feature-title"/>
+                            <Text text="Instant calculations with advanced trinomial tree algorithms and Monte Carlo simulations"
+                                  styleClass="feature-description"/>
+                        </VBox>
+                        <VBox styleClass="feature-card" spacing="10">
+                            <Text text="📊 Advanced Analytics" styleClass="feature-title"/>
+                            <Text text="Comprehensive risk metrics, Greeks calculation, and scenario analysis"
+                                  styleClass="feature-description"/>
+                        </VBox>
+                        <VBox styleClass="feature-card" spacing="10">
+                            <Text text="🔒 Enterprise Security" styleClass="feature-title"/>
+                            <Text text="Bank-grade security with encrypted data storage and secure authentication"
+                                  styleClass="feature-description"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Footer -->
+    <bottom>
+        <VBox styleClass="footer" spacing="15">
+            <Separator/>
+            <HBox spacing="40" alignment="CENTER">
+                <VBox spacing="10" alignment="CENTER_LEFT">
+                    <Text text="QuantOptions" styleClass="footer-title"/>
+                    <Text text="Professional options pricing platform for quantitative analysts and traders"
+                          styleClass="footer-text"/>
+                </VBox>
+                <VBox spacing="10" alignment="CENTER_LEFT">
+                    <Text text="Product" styleClass="footer-subtitle"/>
+                    <Text text="Features" styleClass="footer-link"/>
+                    <Text text="Pricing" styleClass="footer-link"/>
+                    <Text text="API" styleClass="footer-link"/>
+                </VBox>
+                <VBox spacing="10" alignment="CENTER_LEFT">
+                    <Text text="Company" styleClass="footer-subtitle"/>
+                    <Text text="About" styleClass="footer-link"/>
+                    <Text text="Blog" styleClass="footer-link"/>
+                    <Text text="Careers" styleClass="footer-link"/>
+                </VBox>
+                <VBox spacing="10" alignment="CENTER_LEFT">
+                    <Text text="Support" styleClass="footer-subtitle"/>
+                    <Text text="Documentation" styleClass="footer-link"/>
+                    <Text text="Contact" styleClass="footer-link"/>
+                    <Text text="Status" styleClass="footer-link"/>
+                </VBox>
+            </HBox>
+            <Separator/>
+            <HBox spacing="20" alignment="CENTER">
+                <Text text="© 2024 QuantOptions. All rights reserved." styleClass="footer-text"/>
+                <Text text="Privacy Policy" styleClass="footer-link"/>
+                <Text text="Terms of Service" styleClass="footer-link"/>
+                <Text text="Cookie Policy" styleClass="footer-link"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

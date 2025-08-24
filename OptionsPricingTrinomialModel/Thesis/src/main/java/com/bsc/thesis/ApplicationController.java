@@ -6,11 +6,14 @@ import com.bsc.thesis.Options.Exotic;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -401,5 +404,69 @@ public class ApplicationController {
         // Set option type and calculate
         optionTypeComboBox.getSelectionModel().select("European Call");
         handleCalculate(new ActionEvent());
+    }
+
+    @FXML
+    private void handleSignIn(ActionEvent event) {
+        showAuthDialog("Sign In");
+    }
+
+    @FXML
+    private void handleSignUp(ActionEvent event) {
+        showAuthDialog("Sign Up");
+    }
+
+    @FXML
+    private void handleSubscribe(ActionEvent event) {
+        showSubscriptionDialog();
+    }
+
+    private void showAuthDialog(String type) {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle(type);
+        dialog.setHeaderText(type + " to QuantOptions Pro");
+
+        ButtonType loginButtonType = new ButtonType(type, ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField username = new TextField();
+        username.setPromptText("Username");
+        PasswordField password = new PasswordField();
+        password.setPromptText("Password");
+
+        grid.add(new Label("Username:"), 0, 0);
+        grid.add(username, 1, 0);
+        grid.add(new Label("Password:"), 0, 1);
+        grid.add(password, 1, 1);
+
+        if (type.equals("Sign Up")) {
+            PasswordField confirmPassword = new PasswordField();
+            confirmPassword.setPromptText("Confirm Password");
+            grid.add(new Label("Confirm Password:"), 0, 2);
+            grid.add(confirmPassword, 1, 2);
+        }
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(username.getText(), password.getText());
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
+
+    private void showSubscriptionDialog() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Subscription");
+        alert.setHeaderText("Premium Features");
+        alert.setContentText("Subscribe to access advanced analytics, real-time data, and premium support.");
+        alert.showAndWait();
     }
 }
