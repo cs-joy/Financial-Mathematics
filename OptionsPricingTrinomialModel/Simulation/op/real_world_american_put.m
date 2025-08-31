@@ -1,6 +1,6 @@
 function real_world_american_put()
     % Real-world parameters for AAPL $150 Put
-    S0 = 218;           % Current AAPL price
+    S0 = 232.03;           % Current AAPL price
     K = 150;            % Strike price
     r = 0.043;          % 1-year Treasury yield
     expiration_date = datetime('2025-09-05');
