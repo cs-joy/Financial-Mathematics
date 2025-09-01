@@ -86,7 +86,6 @@ for i = 1:length(N_list)
     fprintf('%d\t%.4f\t\t\t%.4f\n', N_list(i), comp_times(i), prices(i));
 end
 
-% Optionally, plot computational time vs N
 figure;
 plot(N_list, comp_times, 'o-');
 xlabel('Number of Steps (N)');
