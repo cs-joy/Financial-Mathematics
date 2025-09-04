@@ -10,7 +10,7 @@ p = 1/6;        % For trinomial model
 
 % Volatilities and N values to test
 sigma_values = [0.1, 0.2, 0.5];
-N_values = [100, 200, 300];
+N_values = [10, 20, 30];  % Reduced for testing - increase later
 
 % Preallocate results tables
 trinomial_results = cell(length(N_values), length(sigma_values));
@@ -27,17 +27,39 @@ for sigma_idx = 1:length(sigma_values)
         
         % Trinomial model (p = 1/6)
         tic;
-        trinomial_price = CliquetPriceTrinomial(Floc, Cloc, Fglob, Cglob, T, m, N, sigma, r, p);
-        trinomial_time = toc;
+        try
+            trinomial_price = CliquetPriceTrinomial(Floc, Cloc, Fglob, Cglob, T, m, N, sigma, r, p);
+            trinomial_time = toc;
+        catch
+            trinomial_price = NaN;
+            trinomial_time = toc;
+            warning('Trinomial calculation failed for σ=%.1f, N=%d', sigma, N);
+        end
         
         % Binomial model (p = 0.5)
         tic;
-        binomial_price = CliquetPriceTrinomial(Floc, Cloc, Fglob, Cglob, T, m, N, sigma, r, 0.5);
-        binomial_time = toc;
+        try
+            binomial_price = CliquetPriceTrinomial(Floc, Cloc, Fglob, Cglob, T, m, N, sigma, r, 0.5);
+            binomial_time = toc;
+        catch
+            binomial_price = NaN;
+            binomial_time = toc;
+            warning('Binomial calculation failed for σ=%.1f, N=%d', sigma, N);
+        end
         
         % Store results
-        trinomial_results{N_idx, sigma_idx} = sprintf('%.5f (%.1f s)', trinomial_price, trinomial_time);
-        binomial_results{N_idx, sigma_idx} = sprintf('%.5f (%.1f s)', binomial_price, binomial_time);
+        if ~isnan(trinomial_price)
+            trinomial_results{N_idx, sigma_idx} = sprintf('%.5f (%.1f s)', trinomial_price, trinomial_time);
+        else
+            trinomial_results{N_idx, sigma_idx} = 'NaN';
+        end
+        
+        if ~isnan(binomial_price)
+            binomial_results{N_idx, sigma_idx} = sprintf('%.5f (%.1f s)', binomial_price, binomial_time);
+        else
+            binomial_results{N_idx, sigma_idx} = 'NaN';
+        end
+        
         trinomial_times(N_idx, sigma_idx) = trinomial_time;
         binomial_times(N_idx, sigma_idx) = binomial_time;
         
@@ -68,37 +90,3 @@ for N_idx = 1:length(N_values)
     end
     fprintf('\n');
 end
-
-% Additional analysis
-fprintf('\n=== COMPUTATIONAL TIME ANALYSIS ===\n');
-fprintf('Trinomial/Binomial time ratios:\n');
-for sigma_idx = 1:length(sigma_values)
-    fprintf('σ=%.1f: ', sigma_values(sigma_idx));
-    for N_idx = 1:length(N_values)
-        ratio = trinomial_times(N_idx, sigma_idx) / binomial_times(N_idx, sigma_idx);
-        fprintf('N=%d: %.1fx  ', N_values(N_idx), ratio);
-    end
-    fprintf('\n');
-end
-
-% Create a bar chart comparing computational times
-figure;
-subplot(1, 2, 1);
-bar(trinomial_times);
-set(gca, 'XTickLabel', N_values);
-xlabel('Number of Steps (N)');
-ylabel('Computational Time (s)');
-title('Trinomial Model Computational Times');
-legend(arrayfun(@(x) sprintf('σ=%.1f', x), sigma_values, 'UniformOutput', false));
-grid on;
-
-subplot(1, 2, 2);
-bar(binomial_times);
-set(gca, 'XTickLabel', N_values);
-xlabel('Number of Steps (N)');
-ylabel('Computational Time (s)');
-title('Binomial Model Computational Times');
-legend(arrayfun(@(x) sprintf('σ=%.1f', x), sigma_values, 'UniformOutput', false));
-grid on;
-
-% Helper functions (must be in the same file or separate files)
