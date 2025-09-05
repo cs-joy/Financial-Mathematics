@@ -1,4 +1,4 @@
-% Parameters from Table 5.4
+% Parameters from
 Floc = 0;       % Local floor
 Cloc = 0.08;    % Local cap
 Fglob = 0.16;   % Global floor
@@ -10,7 +10,7 @@ p = 1/6;        % For trinomial model
 
 % Volatilities and N values to test
 sigma_values = [0.1, 0.2, 0.5];
-N_values = [10, 20, 30];  % Reduced for testing - increase later
+N_values = [100, 200, 300]; 
 
 % Preallocate results tables
 trinomial_results = cell(length(N_values), length(sigma_values));
@@ -24,7 +24,6 @@ for sigma_idx = 1:length(sigma_values)
     
     for N_idx = 1:length(N_values)
         N = N_values(N_idx);
-        
         % Trinomial model (p = 1/6)
         tic;
         try
