@@ -8,7 +8,7 @@
 % Obtain payoff for CoC in each node at time T1
 % Regressive algorithm to obtain prices of CoC at each time t<T1
 
-function currentPrice = EUCompound_Tri(S0, T1, T2, N, K1, K2, p, r, sigma)
+function P = EUCompound_Tri(S0, T1, T2, N, K1, K2, p, r, sigma)
     % Checking input arguments
     if (r<0) || (T1<0) || (T2<0) || (K1<0) || (K2<0)
         disp('Error: invalid input parameters');
@@ -26,10 +26,8 @@ function currentPrice = EUCompound_Tri(S0, T1, T2, N, K1, K2, p, r, sigma)
 
     % Choosing payoff functions
     %g1=['max(0, x-' num2str(K1) ')'];
-    payoff_underlying = @(x) max(0, x - K2);
+    payoff_underlying = @(x) max(0, x - K2)
     %g2=['max(0, x-' num2str(K2) ')'];
-    payoff_compound = @(x) max(0, x - K1);
-
     S=StockPricesnew(S0, N1, u);
     M=size(S,1);
     P=zeros(M,N1+1); % Compound option prices
@@ -38,18 +36,14 @@ function currentPrice = EUCompound_Tri(S0, T1, T2, N, K1, K2, p, r, sigma)
     % Calculating underlying asset prices at time T1
     for i=1:M
         S_temp=StockPricesnew(S(i,N1+1), N2, u);
-        %Und_temp=OptionPrices_h(S_temp, g2, r, p, h, u);
-        Und_temp=OptionPrices_h(S_temp, payoff_underlying, r, p, h, u);
+        Und_temp=OptionPrices_h(S_temp, g2, r, p, h, u);
         Und_prices(i,1)=Und_temp(N2+1,1);
     end
 
     % Calculate final prices, i.e. payoffs, of compound option
-    % syms x;
-    % f = str2sym(g1);
-    % P(:,N1+1)=subs(f,x,Und_prices(:,1));
-    for i=1:M
-        P(i, N1+1) = payoff_compound(Und_prices(i,1));
-    end
+    syms x;
+    f = str2sym(g1);
+    P(:,N1+1)=subs(f,x,Und_prices(:,1));
     
     q0 = 1 - 2*p;
     qu=(exp(r*h)-exp(-u))/(exp(u)-exp(-u))-q0*(1-exp(-u))/(exp(u)-exp(-u));
@@ -61,7 +55,4 @@ function currentPrice = EUCompound_Tri(S0, T1, T2, N, K1, K2, p, r, sigma)
             P(i,j)=exp(-r*h)*(qu*P(i-1,j+1)+q0*P(i,j+1)+qd*P(i+1,j+1));
         end
     end
-
-    % Extract the current price at time 0 (center of the first column)
-    currentPrice = P(N1+1, 1);
 end

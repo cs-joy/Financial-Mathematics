@@ -1,0 +1,39 @@
+% OptionPrices_h creates a matrix with the prices of an option
+% calculated by the trinomial model. This function works just
+% like the function OptionPrices, but OptionPrices_h takes
+% the time parameter h=T/N into account. This makes it possible
+% to price real-world options.
+function P=OptionPrices_h(S,payoff_function,r,p,h,u)
+    % Check input arguments
+    if (r<0) || (p<0)
+        disp('Error: invalid input parameters');
+        P=0;
+        
+        return
+    end
+
+    M=size(S,1);
+    N=size(S,2);
+    P=zeros(M,N);
+    
+    q0=1-2*p;
+
+    % syms x;
+    % f=str2sym(g);
+
+    qu=(exp(r*h)-exp(-u))/(exp(u)-exp(-u))-q0*(1-exp(-u))/(exp(u)-exp(-u));
+    qd=(exp(u)-exp(r*h))/(exp(u)-exp(-u))-q0*(exp(u)-1)/(exp(u)-exp(-u));
+    
+    % Calculate final price, i.e. payoff, of option
+    % P(:,N)=subs(f,x,S(:,N));
+    for i=1:M
+        P(i, N) = payoff_function(S(i, N));
+    end
+
+    % Recurrence formula to calculate option prices
+    for j=N-1:-1:1
+        for i=(N-j+1):(M-(N-j))
+            P(i,j)=exp(-r*h)*(qu*P(i-1,j+1)+q0*P(i,j+1)+qd*P(i+1,j+1));
+        end
+    end
+end
