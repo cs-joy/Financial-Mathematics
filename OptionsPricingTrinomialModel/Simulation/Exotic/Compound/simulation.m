@@ -17,7 +17,8 @@ trinomial_prices = zeros(size(N_values));
 % Calculate Geske price (constant for all N)
 % Using the closed-form Geske formula for CoC option
 % Todo: need to implement the Geske formula
-geske_price = geske_coe_price(S0, K1, K2, T1, T2, r, sigma);
+% geske_price = geske_coe_price(S0, K1, K2, T1, T2, r, sigma);
+geske_price = EUCompound_BS(S0, r, sigma, T1, T2, K1, K2);
 geske_prices(:) = geske_price;  % Same for all N
 
 % Calculate trinomial price for each N
