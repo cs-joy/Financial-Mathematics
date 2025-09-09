@@ -40,7 +40,7 @@ brief look at the closed-form pricing formula.
 - Trinomial approximation - [EUCompound_Tri.m](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/EUCompound_Tri.m)
 
 ## Numerical results
-<img src="https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/FIG5_2.svg" alt="Trinomial model and Theoretical approximation of the CoC European option price"  style="width:40%; height:auto">
+<img src="https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/FIG5_2.svg" alt="Trinomial model and Theoretical approximation of the CoC European option price"  style="width:auto; height:auto">
 
 ## Conclusion
 ![Compiled price and Computational time](https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/coc_pricing_comparison.svg){: width="200" height="100"}
