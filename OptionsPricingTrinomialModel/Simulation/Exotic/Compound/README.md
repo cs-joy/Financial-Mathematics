@@ -36,11 +36,11 @@ look specifically at approximation of the theoretical
 value usng the trinomial model. However, we will first take a
 brief look at the closed-form pricing formula.
 
-- Theoretical valuation - `EUCompound_BS.m`
-- Trinomial approximation - `EUCompound_Tri.m`
+- Theoretical valuation - `[EUCompound_BS.m](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/EUCompound_BS.m)`
+- Trinomial approximation - `[EUCompound_Tri.m](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/EUCompound_Tri.m)`
 
 ## Numerical results
-![Trinomial model approximation of the CoC option price](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/FIG5_2.svg)
+![Trinomial model approximation of the CoC option price](https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/FIG5_2.svg)
 
 ## Conclusion
 ![Compiled price and Computational time](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/coc_pricing_comparison.svg)
