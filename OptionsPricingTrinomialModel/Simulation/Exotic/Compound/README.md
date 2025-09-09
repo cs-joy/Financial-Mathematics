@@ -36,14 +36,14 @@ look specifically at approximation of the theoretical
 value usng the trinomial model. However, we will first take a
 brief look at the closed-form pricing formula.
 
-- Theoretical valuation - `[EUCompound_BS.m](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/EUCompound_BS.m)`
-- Trinomial approximation - `[EUCompound_Tri.m](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/EUCompound_Tri.m)`
+- Theoretical valuation - [EUCompound_BS.m](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/EUCompound_BS.m)
+- Trinomial approximation - [EUCompound_Tri.m](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/EUCompound_Tri.m)
 
 ## Numerical results
-![Trinomial model approximation of the CoC option price](https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/FIG5_2.svg)
+![Trinomial model approximation of the CoC option price](https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/FIG5_2.svg){: width="200" height="100"}
 
 ## Conclusion
-![Compiled price and Computational time](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/coc_pricing_comparison.svg)
+![Compiled price and Computational time](https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/coc_pricing_comparison.svg){: width="200" height="100"}
 It is clear that the trinomial model may be used to correctly
 approximate the theoretical value of a compound option, for instance
 the CoC option as we have shown `output/coc_pricing_results.csv`. However this seems to be suboptimal way of valuating
