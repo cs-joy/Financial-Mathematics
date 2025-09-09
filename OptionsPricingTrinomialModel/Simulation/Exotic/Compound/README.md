@@ -40,10 +40,10 @@ brief look at the closed-form pricing formula.
 - Trinomial approximation - `EUCompound_Tri.m`
 
 ## Numerical results
-![Trinomial model approximation of the CoC option price](./output/FIG5_2.svg)
+![Trinomial model approximation of the CoC option price](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/FIG5_2.svg)
 
 ## Conclusion
-![Compiled price and Computational time](./output/coc_pricing_comparison.svg)
+![Compiled price and Computational time](https://github.com/cs-joy/Financial-Mathematics/blob/main/OptionsPricingTrinomialModel/Simulation/Exotic/Compound/output/coc_pricing_comparison.svg)
 It is clear that the trinomial model may be used to correctly
 approximate the theoretical value of a compound option, for instance
 the CoC option as we have shown `output/coc_pricing_results.csv`. However this seems to be suboptimal way of valuating
