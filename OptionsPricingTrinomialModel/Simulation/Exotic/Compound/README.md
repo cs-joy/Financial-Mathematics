@@ -41,3 +41,11 @@ brief look at the closed-form pricing formula.
 
 ## Numerical results
 ![Trinomial model approximation of the CoC option price](./output/FIG5_2.svg)
+
+## Conclusion
+![Compiled price and Computational time](./output/coc_pricing_comparison.svg)
+It is clear that the trinomial model may be used to correctly
+approximate the theoretical value of a compound option, for instance
+the CoC option as we have shown `output/coc_pricing_results.csv`. However this seems to be suboptimal way of valuating
+the option, compared to simply using the theoretical valuation. From this analysis the time to evaluate the CoC option price using the trinomial
+approach was significantly longer than `Geske's` closed form valuation model.
