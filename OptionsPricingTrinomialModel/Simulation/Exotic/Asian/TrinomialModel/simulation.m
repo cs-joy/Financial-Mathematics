@@ -83,7 +83,7 @@ end
 % Display results in a table
 fprintf('N\tComputational Time (s)\tInitial Price\n');
 for i = 1:length(N_list)
-    fprintf('%d\t%.4f\t\t\t%.4f\n', N_list(i), comp_times(i), prices(i));
+    fprintf('%d\t%.4f s\t\t\t%.4f\n', N_list(i), comp_times(i), prices(i));
 end
 
 figure;
@@ -92,21 +92,3 @@ xlabel('Number of Steps (N)');
 ylabel('Computational Time (s)');
 title('Computational Time for Trinomial Model (Asian Option)');
 grid on;
-
-% RecursiveAsian function (as provided)
-function [V, P_tot] = RecursiveAsian(V, N, K, n, P_tot, P, Q, M, allS)
-allS_prev = allS;
-S_prev = allS(end);
-P_prev = P;
-for i = 1:3
-    allS = [allS_prev, S_prev * exp(M(i))];
-    P = P_prev * Q(i);
-    if n == N
-        P_tot = P_tot + P;
-        % Calculates the payoff for each path
-        V = V + P * max(mean(allS(2:end)) - K, 0);
-    else % Increases n until n=N
-        [V, P_tot] = RecursiveAsian(V, N, K, n+1, P_tot, P, Q, M, allS);
-    end
-end
-end
