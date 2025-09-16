@@ -28,7 +28,6 @@ for i = 1:length(N_values)
         q0 = 1 - 2*p;                  %% from Theorem 4.1.1
         
         %% generate trinomial stock price tree
-        %S_tree = generate_trinomial_tree(S0, u, N);
         S_tree = StockPrices(S0, N, u);
         
         %% payoff

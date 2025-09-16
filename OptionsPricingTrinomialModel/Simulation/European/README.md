@@ -1,0 +1,29 @@
+# European Options
+
+
+
+## Mathematical Representation
+
+
+## Pricing methods
+
+
+## Numerical results
+Table 4.1 Error of the trinomial pricing model for different values of `N` and `p`.
+| N | p=0.1 | p=0.2 | p=0.3 | p=0.4| p=0.5 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| **10**  |  0.0087420 | 0.0030177 | 0.0012904 | 0.0004725 | 0.0039171  |
+| **20**  |  0.0041316 | 0.0014988 | 0.0006540 | 0.0002368 | 0.0019732  |
+| **30**  |  0.0027148 | 0.0009971 | 0.0004379 | 0.0001605 | 0.0013185  |
+| **40**  |  0.0020226 | 0.0007471 | 0.0003291 | 0.0001214 | 0.0009900  |
+| **50**  |  0.0016119 | 0.0005973 | 0.0002636 | 0.0000976  0.0007925  |
+| **60**  |  0.0013399 | 0.0004976 | 0.0002199 | 0.0000816 | 0.0006607  |
+| **70**  |  0.0011465 | 0.0004264 | 0.0001886 | 0.0000701 | 0.0005665  |
+| **80**  |  0.0010018 | 0.0003730 | 0.0001651 | 0.0000614 | 0.0004958  |
+| **90**  |  0.0008896 | 0.0003315 | 0.0001468 | 0.0000547 | 0.0004408  |
+| **100** |   0.0008000 | 0.0002983 | 0.0001321 | 0.0000493 | 0.0003968 |
+
+<img src="https://raw.githubusercontent.com/cs-joy/Financial-Mathematics/main/OptionsPricingTrinomialModel/Simulation/European/v2/output/error_simulation.svg" alt="Error for the trinomial model asa function of p"  style="width:100%; height:auto">
+
+## Conclusion
+
