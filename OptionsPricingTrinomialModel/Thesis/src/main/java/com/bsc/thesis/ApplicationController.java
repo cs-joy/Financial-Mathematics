@@ -1,8 +1,9 @@
 package com.bsc.thesis;
 
 import com.bsc.thesis.Options.American;
-import com.bsc.thesis.Options.European;
+import com.bsc.thesis.Options.European_Unused;
 import com.bsc.thesis.Options.Exotic;
+import com.bsc.thesis.Options.vanilla.European;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,6 +35,7 @@ public class ApplicationController {
     @FXML private TextField numStepsField;
     @FXML private TextField timeStepField;
     @FXML private TextField upFactorField;
+    @FXML private TextField prob_p_Field;
 
     // Option type selection
     @FXML private ComboBox<String> optionTypeComboBox;
@@ -63,11 +65,28 @@ public class ApplicationController {
     @FXML private TextArea resultTextArea;
     @FXML private Text statusText;
 
+    @FXML private Text exoticTitle;
+
     private double lastCalculatedPrice = 0.0;
     private String lastCalculationDetails = "";
 
     @FXML
     public void initialize() {
+//        System.out.println("asianParams is null: " + (asianParams == null));
+//        System.out.println("barrierParams is null: " + (barrierParams == null));
+//        System.out.println("cliquetParams is null: " + (cliquetParams == null));
+//        System.out.println("compoundParams is null: " + (compoundParams == null));
+//        System.out.println("bermudanParams is null: " + (bermudanParams == null));
+//        System.out.println("lookbackParams is null: " + (lookbackParams == null));
+        barrierParams.setVisible(false);
+        asianParams.setVisible(false);
+        cliquetParams.setVisible(false);
+        compoundParams.setVisible(false);
+        bermudanParams.setVisible(false);
+        lookbackParams.setVisible(false);
+
+        exoticTitle.setVisible(false);
+
         // Set up option type change listener
         optionTypeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateUIForOptionType(newVal);
@@ -86,12 +105,13 @@ public class ApplicationController {
     }
 
     private void setDefaultValues() {
-        stockPriceField.setText("100.0");
-        strikePriceField.setText("100.0");
-        riskFreeRateField.setText("0.05");
-        volatilityField.setText("0.2");
-        timeToMaturityField.setText("1.0");
+        stockPriceField.setText("150.0");
+        strikePriceField.setText("150.0");
+        riskFreeRateField.setText("0.0425");
+        volatilityField.setText("0.25");
+        timeToMaturityField.setText("0.08219178082");
         numStepsField.setText("100");
+        prob_p_Field.setText("0.4");
 
         // Auto-calculate time step and up factor
         calculateTreeParameters();
@@ -109,31 +129,50 @@ public class ApplicationController {
             double T = Double.parseDouble(timeToMaturityField.getText());
             int N = Integer.parseInt(numStepsField.getText());
             double sigma = Double.parseDouble(volatilityField.getText());
+            double p = Double.parseDouble(prob_p_Field.getText());
 
             double h = T / N;
-            double u = sigma * Math.sqrt(3 * h);
+            double u = sigma * Math.sqrt(h / (2 * p));
 
             timeStepField.setText(String.format("%.6f", h));
+            timeStepField.setDisable(true);
             upFactorField.setText(String.format("%.6f", u));
+            upFactorField.setDisable(true);
         } catch (NumberFormatException e) {
-            // Ignore if fields are not fully populated yet
+            System.err.println(e.getMessage());
         }
     }
 
     private void updateUIForOptionType(String optionType) {
         // Hide all exotic parameter sections first
-        barrierParams.setVisible(false);
-        barrierParams.setManaged(false);
-        asianParams.setVisible(false);
-        asianParams.setManaged(false);
-        cliquetParams.setVisible(false);
-        cliquetParams.setManaged(false);
-        compoundParams.setVisible(false);
-        compoundParams.setManaged(false);
-        bermudanParams.setVisible(false);
-        bermudanParams.setManaged(false);
-        lookbackParams.setVisible(false);
-        lookbackParams.setManaged(false);
+        if (barrierParams != null) {
+            barrierParams.setVisible(false);
+            barrierParams.setManaged(false);
+        }
+        if (asianParams != null) {
+            asianParams.setVisible(false);
+            asianParams.setManaged(false);
+        }
+        if (cliquetParams != null) {
+            cliquetParams.setVisible(false);
+            cliquetParams.setManaged(false);
+        }
+
+        if (compoundParams != null) {
+            compoundParams.setVisible(false);
+            compoundParams.setManaged(false);
+        }
+
+        if (bermudanParams != null) {
+            bermudanParams.setVisible(false);
+            bermudanParams.setManaged(false);
+        }
+
+        if (lookbackParams != null) {
+            lookbackParams.setVisible(false);
+            lookbackParams.setManaged(false);
+        }
+
 
         // Show exotic container only for exotic options
         boolean isExotic = optionType != null &&
@@ -141,35 +180,50 @@ public class ApplicationController {
                         optionType.contains("Cliquet") || optionType.contains("Compound") ||
                         optionType.contains("Lookback") || optionType.contains("Bermudan"));
 
-        exoticParamsContainer.setVisible(isExotic);
-        exoticParamsContainer.setManaged(isExotic);
+        if (exoticParamsContainer != null) {
+            exoticParamsContainer.setVisible(isExotic);
+            exoticParamsContainer.setManaged(isExotic);
+        }
 
         // Show specific parameters based on option type
         if (optionType != null) {
+            exoticTitle.setVisible(true);
             switch (optionType) {
                 case "Barrier Option":
-                    barrierParams.setVisible(true);
-                    barrierParams.setManaged(true);
+                    if (barrierParams != null) {
+                        barrierParams.setVisible(true);
+                        barrierParams.setManaged(true);
+                    }
                     break;
                 case "Asian Option":
-                    asianParams.setVisible(true);
-                    asianParams.setManaged(true);
+                    if (asianParams != null) {
+                        asianParams.setVisible(true);
+                        asianParams.setManaged(true);
+                    }
                     break;
                 case "Cliquet Option":
-                    cliquetParams.setVisible(true);
-                    cliquetParams.setManaged(true);
+                    if (cliquetParams != null) {
+                        cliquetParams.setVisible(true);
+                        cliquetParams.setManaged(true);
+                    }
                     break;
                 case "Compound Option":
-                    compoundParams.setVisible(true);
-                    compoundParams.setManaged(true);
+                    if (compoundParams != null) {
+                        compoundParams.setVisible(true);
+                        compoundParams.setManaged(true);
+                    }
                     break;
                 case "Bermudan Option":
-                    bermudanParams.setVisible(true);
-                    bermudanParams.setManaged(true);
+                    if (bermudanParams != null) {
+                        bermudanParams.setVisible(true);
+                        bermudanParams.setManaged(true);
+                    }
                     break;
                 case "Lookback Option":
-                    lookbackParams.setVisible(true);
-                    lookbackParams.setManaged(true);
+                    if (lookbackParams != null) {
+                        lookbackParams.setVisible(true);
+                        lookbackParams.setManaged(true);
+                    }
                     break;
             }
         }
@@ -178,78 +232,82 @@ public class ApplicationController {
     @FXML
     private void handleCalculate(ActionEvent event) {
         try {
-            // Get common parameters
+            // get common parameters
             double S0 = Double.parseDouble(stockPriceField.getText());
             double K = Double.parseDouble(strikePriceField.getText());
             double r = Double.parseDouble(riskFreeRateField.getText());
             double sigma = Double.parseDouble(volatilityField.getText());
             double T = Double.parseDouble(timeToMaturityField.getText());
             int N = Integer.parseInt(numStepsField.getText());
+            double p = Double.parseDouble(prob_p_Field.getText());
             double h = Double.parseDouble(timeStepField.getText());
             double u = Double.parseDouble(upFactorField.getText());
 
             String optionType = optionTypeComboBox.getValue();
+            System.out.println("optionType: "+optionType);
             double result = 0.0;
-            String calculationMethod = "";
+            String PricingMethod = "";
+            new European(K);
 
             // Calculate based on option type
             switch (optionType) {
+
                 case "European Call":
-                    result = European.calculateEuropeanCallTrinomial(S0, K, r, N, h, u, sigma);
-                    calculationMethod = "Trinomial Tree";
+                    result = European.calculateEuropeanOptions(true, S0, N, u, r, p, h);
+                    PricingMethod = "Trinomial Tree";
                     break;
                 case "European Put":
-                    result = European.calculateEuropeanPutTrinomial(S0, K, r, N, h, u, sigma);
-                    calculationMethod = "Trinomial Tree";
+                    result = European.calculateEuropeanOptions(false, S0, N, u, r, p, h);
+                    PricingMethod = "Trinomial Tree";
                     break;
                 case "American Call":
                     double p1 = Math.random();
                     result = American.calculateAmericanPut(S0, K, r, N, p1, h, u, sigma);
-                    calculationMethod = "Trinomial Tree";
+                    PricingMethod = "Trinomial Tree";
                     break;
                 case "American Put":
-                    double p = Math.random();
+                    //double p = Math.random();
                     result = American.calculateAmericanPut(S0, K, r, N, p, h, u, sigma);
-                    calculationMethod = "Trinomial Tree";
+                    PricingMethod = "Trinomial Tree";
                     break;
                 case "Asian Option":
                     result = Exotic.calculateAsianCall(S0, K, r, N, h, u, sigma);
-                    calculationMethod = "Asian Arithmetic Average (Trinomial Tree)";
+                    PricingMethod = "Asian Arithmetic Average (Trinomial Tree)";
                     break;
                 case "Barrier Option":
                     double barrier = Double.parseDouble(barrierPriceField.getText());
                     String barrierType = barrierTypeComboBox.getValue();
                     result = calculateBarrierOption(S0, K, barrier, r, N, h, u, sigma, barrierType);
-                    calculationMethod = "Barrier Option (" + barrierType + ") - Trinomial Tree";
+                    PricingMethod = "Barrier Option (" + barrierType + ") - Trinomial Tree";
                     break;
                 case "Cliquet Option":
                     int numPeriods = Integer.parseInt(numPeriodsField.getText());
                     double localCap = Double.parseDouble(localCapField.getText());
                     double localFloor = Double.parseDouble(localFloorField.getText());
                     result = Exotic.calculateCliquetOption(S0, K, localCap, localFloor, 0.3, -0.3, r, T, sigma, numPeriods);
-                    calculationMethod = "Cliquet Option - Monte Carlo Simulation";
+                    PricingMethod = "Cliquet Option - Monte Carlo Simulation";
                     break;
                 case "Compound Option":
                     double K1 = Double.parseDouble(compoundStrikeField.getText());
                     double T1 = Double.parseDouble(compoundMaturityField.getText());
                     result = Exotic.calculateCompoundOption(S0, K1, K, r, T1, T, sigma, true);
-                    calculationMethod = "Compound Option (Call on Call) - Analytical";
+                    PricingMethod = "Compound Option (Call on Call) - Analytical";
                     break;
                 case "Lookback Option":
                     result = Exotic.calculateLookbackCall(S0, r, N, h, u, sigma);
-                    calculationMethod = "Lookback Option (Floating Strike) - Trinomial Tree";
+                    PricingMethod = "Lookback Option (Floating Strike) - Trinomial Tree";
                     break;
                 case "Bermudan Option":
                     int[] exerciseDates = parseExerciseDates(exerciseDatesField.getText());
                     result = Exotic.calculateBermudanPut(S0, K, r, N, h, u, sigma, exerciseDates);
-                    calculationMethod = "Bermudan Option - Trinomial Tree with Early Exercise";
+                    PricingMethod = "Bermudan Option - Trinomial Tree with Early Exercise";
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown option type: " + optionType);
             }
 
             lastCalculatedPrice = result;
-            displayResults(result, optionType, calculationMethod, S0, K, r, sigma, T, N);
+            displayResults(result, optionType, PricingMethod, S0, K, r, sigma, T, N);
 
         } catch (NumberFormatException e) {
             showError("Please enter valid numeric values in all required fields.");
@@ -271,7 +329,7 @@ public class ApplicationController {
                 return Exotic.calculateBarrierOption(S0, K, barrier, r, N, h, u, sigma, false, false, true);
             case "Up-and-In":
                 // Up-and-In = Vanilla - Up-and-Out
-                double vanilla = European.calculateEuropeanCallTrinomial(S0, K, r, N, h, u, sigma);
+                double vanilla = European_Unused.calculateEuropeanCallTrinomial(S0, K, r, N, h, u, sigma);
                 double upOut = Exotic.calculateBarrierOption(S0, K, barrier, r, N, h, u, sigma, false, false, true);
                 return vanilla - upOut;
             default:
@@ -355,6 +413,7 @@ public class ApplicationController {
         numStepsField.clear();
         timeStepField.clear();
         upFactorField.clear();
+        prob_p_Field.clear();
 
         // Clear exotic parameters
         barrierPriceField.clear();
@@ -424,7 +483,7 @@ public class ApplicationController {
     private void showAuthDialog(String type) {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle(type);
-        dialog.setHeaderText(type + " to QuantOptions Pro");
+        dialog.setHeaderText(type + " to ThalesZ Options Pricing Tools");
 
         ButtonType loginButtonType = new ButtonType(type, ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);

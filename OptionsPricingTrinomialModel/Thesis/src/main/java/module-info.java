@@ -10,6 +10,7 @@ module com.bsc.thesis {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    //requires com.bsc.thesis;
 
     opens com.bsc.thesis to javafx.fxml;
     exports com.bsc.thesis;
