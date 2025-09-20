@@ -1,8 +1,7 @@
 package com.bsc.thesis;
 
-import com.bsc.thesis.Options.American;
-import com.bsc.thesis.Options.European_Unused;
 import com.bsc.thesis.Options.Exotic;
+import com.bsc.thesis.Options.vanilla.American;
 import com.bsc.thesis.Options.vanilla.European;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -230,7 +229,7 @@ public class ApplicationController {
     }
 
     @FXML
-    private void handleCalculate(ActionEvent event) {
+    private void handleCalculate(ActionEvent event) throws InterruptedException {
         try {
             // get common parameters
             double S0 = Double.parseDouble(stockPriceField.getText());
@@ -262,12 +261,12 @@ public class ApplicationController {
                     break;
                 case "American Call":
                     double p1 = Math.random();
-                    result = American.calculateAmericanPut(S0, K, r, N, p1, h, u, sigma);
+                    result = 0.0;
                     PricingMethod = "Trinomial Tree";
                     break;
                 case "American Put":
                     //double p = Math.random();
-                    result = American.calculateAmericanPut(S0, K, r, N, p, h, u, sigma);
+                    result = new American(K).calculateAmericanOptions(S0, N, r, p, sigma);
                     PricingMethod = "Trinomial Tree";
                     break;
                 case "Asian Option":
@@ -329,7 +328,8 @@ public class ApplicationController {
                 return Exotic.calculateBarrierOption(S0, K, barrier, r, N, h, u, sigma, false, false, true);
             case "Up-and-In":
                 // Up-and-In = Vanilla - Up-and-Out
-                double vanilla = European_Unused.calculateEuropeanCallTrinomial(S0, K, r, N, h, u, sigma);
+                double p = Double.parseDouble(prob_p_Field.getText());
+                double vanilla = new European(K).calculateEuropeanOptions(true, S0, N, u, r, p, h);
                 double upOut = Exotic.calculateBarrierOption(S0, K, barrier, r, N, h, u, sigma, false, false, true);
                 return vanilla - upOut;
             default:
@@ -448,7 +448,7 @@ public class ApplicationController {
     }
 
     // Helper method for testing
-    public void testCalculation() {
+    public void testCalculation() throws InterruptedException {
         // Auto-populate some test values
         stockPriceField.setText("100.0");
         strikePriceField.setText("100.0");

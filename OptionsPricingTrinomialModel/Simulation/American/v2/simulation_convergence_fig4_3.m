@@ -10,16 +10,21 @@ p = 0.4;
 sigma = 0.3;
 S0 = 10;
 N=T;
-for t=T   
+for t=T
     h = T/N;
-    u = sigma*sqrt(h/2/p);
-    S=StockPricesnew(S0,t,u);
+    %fprintf("h= %.2f", h);
+    u = sigma*sqrt(h/2*p); %% ??
+    S=StockPrices(S0,t,u);
     AA=AmericanPut(S,K,r,t,p,h,u);
     A(t)=AA(t+1,1);
 end
 %% calculate american perpetual put price
 q = 0; % yield dividens - for our expriement
 perpetual_price = AmericanPerpetualPut(S0, K, r, sigma, q);
+fprintf("pertual_price: %.6f\n", perpetual_price);
+
+trino_price = A(200);
+fprintf("trino price: %.6f\n", trino_price);
 
 plot(T,A);
 hold on;

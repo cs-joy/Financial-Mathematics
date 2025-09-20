@@ -309,9 +309,9 @@ public class Exotic {
     public static double calculateBarrierDownInCall(double S0, double K, double barrier,
                                                     double r, int N, double h, double u, double sigma) {
         // Down-In = Vanilla - Down-Out
-        double vanilla = European_Unused.calculateEuropeanCallTrinomial(S0, K, r, N, h, u, sigma);
-        double downOut = calculateBarrierDownOutCall(S0, K, barrier, r, N, h, u, sigma);
-        return vanilla - downOut;
+        //double vanilla = European_Unused.calculateEuropeanCallTrinomial(S0, K, r, N, h, u, sigma);
+        //double downOut = calculateBarrierDownOutCall(S0, K, barrier, r, N, h, u, sigma);
+        return 0;//vanilla - downOut;
     }
 
     public static double calculateBarrierOption(double S0, double K, double barrier,

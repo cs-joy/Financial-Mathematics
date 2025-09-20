@@ -1,0 +1,20 @@
+
+S0=150.0;
+K=150.0;
+r = 0.0425;
+q = 0;
+sigma = 0.25;
+
+perpetual_price = AmericanPerpetualPut(S0, K, r, sigma, q);
+fprintf("pertual_price: %.6f\n", perpetual_price);
+
+for t=T
+    h = T/N;
+    fprintf("h= %.2f", h);
+    u = sigma*sqrt(h/2/p); %% ??
+    S=StockPrices(S0,t,u);
+    AA=AmericanPut(S,K,r,t,p,h,u);
+    A(t)=AA(t+1,1);
+end
+trino_price = []
+fprintf("trino price: {%.4f}", trino_price);

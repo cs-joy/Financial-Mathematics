@@ -1,5 +1,6 @@
 package com.bsc.thesis;
 
+import com.bsc.thesis.Options.vanilla.American;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,8 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static com.bsc.thesis.Options.vanilla.AmericanPut.americanPut;
-import static com.bsc.thesis.Options.vanilla.AmericanPut.createStockTree;
+import static com.bsc.thesis.Options.vanilla.American.*;
 
 
 public class HelloApplication extends Application {
@@ -23,24 +23,20 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         launch();
-        check();
     }
-
-    public static void check() {
-        double S0 = 100.0;
-        double K = 100.0;
-        double r = 0.05;
-        int N = 100;
+/*
+    public static void check() throws InterruptedException {
+        double S0 = 10.0;
+        double K = 10.0;
+        double r = 0.01;
+        int N = 200;
         double p = 0.4;
-        double T = 1.0;
-        double sigma = 0.2;
+        double sigma = 0.3;
 
-        double h = T / N;
-        double u = sigma * Math.sqrt(h / (2 * p));
+        double optionPrices = new American(K).calculateAmericanOptions(S0, N, r, p, sigma);
 
-        double[][] stockTree = createStockTree(S0, N, u);
-        double[][] optionPrices = americanPut(stockTree, K, r, N, p, h, u);
-
-        System.out.printf("American Put Option Price: %.4f%n", optionPrices[N][0]);
+        System.out.printf("American Put Option Price: %.4f%n", optionPrices);
     }
+
+ */
 }

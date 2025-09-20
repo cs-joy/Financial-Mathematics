@@ -1,6 +1,6 @@
 package com.bsc.thesis;
 
-import com.bsc.thesis.Options.American;
+import com.bsc.thesis.Options.vanilla.American;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -66,7 +66,7 @@ public class OldApplicationController {
      */
 
     @FXML
-    private void handleCalculate(ActionEvent event) {
+    private void handleCalculate(ActionEvent event) throws InterruptedException {
         String optionType = optionTypeComboBox.getValue();
 
         int N = Integer.parseInt(input4.getText());
@@ -83,10 +83,10 @@ public class OldApplicationController {
         double u = sigma * Math.sqrt(3 * h);
         double p = 1.0/6;
 
-        American.calculateAmericanPut(S0, K, r, 10, p, h, u, sigma);
+        new American(K).calculateAmericanOptions(S0, N, r, p, sigma);
 
         long startTime = System.nanoTime();
-        double optionPrice = American.calculateAmericanPut(S0, K, r, N, p, h, u, sigma);
+        double optionPrice = new American(K).calculateAmericanOptions(S0, N, r, p, sigma);
         long endTime = System.nanoTime();
 
         resultText.setText(String.format("American Put Option Price: %.4f%n", optionPrice));

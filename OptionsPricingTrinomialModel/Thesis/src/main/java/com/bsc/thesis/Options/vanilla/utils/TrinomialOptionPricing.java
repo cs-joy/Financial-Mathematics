@@ -90,6 +90,35 @@ public class TrinomialOptionPricing {
         return P[rootRow][0];
     }
 
+    public static double[][] americanPut(double[][] S, double K, double r,
+                                         int N, double p, double h, double u) {
+
+        double[][] A = new double[2 * N + 1][N + 1];
+
+        // Initialize final column (expiration)
+        for (int i = 0; i < 2 * N + 1; i++) {
+            A[i][N] = Math.max(K - S[i][N], 0);
+        }
+
+        double q0 = 1 - 2 * p;
+        double qu = (Math.exp(r * h) - Math.exp(-u)) / (Math.exp(u) - Math.exp(-u))
+                - q0 * (1 - Math.exp(-u)) / (Math.exp(u) - Math.exp(-u));
+        double qd = (Math.exp(u) - Math.exp(r * h)) / (Math.exp(u) - Math.exp(-u))
+                - q0 * (Math.exp(u) - 1) / (Math.exp(u) - Math.exp(-u));
+
+        // Backward induction
+        for (int j = N - 1; j >= 0; j--) {
+            for (int i = N - j; i <= N + j; i++) {
+                double continuationValue = Math.exp(-r * h) *
+                        (qu * A[i - 1][j + 1] + q0 * A[i][j + 1] + qd * A[i + 1][j + 1]);
+
+                A[i][j] = Math.max(Math.max(K - S[i][j], 0), continuationValue);
+            }
+        }
+
+        return A;
+    }
+
     private static void validateInputs(double[][] S, double r, double p, double h, double u) {
         if (S == null || S.length == 0 || S[0].length == 0) {
             throw new IllegalArgumentException("Stock price tree must not be null or empty");

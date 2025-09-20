@@ -38,7 +38,7 @@ for i = 1:length(sigma_list)
     P_tot = 0;
     n = 1;
     P_init = 1;
-    allS = [S0];
+    allS = S0;
     
     [V, P_tot] = RecursiveAsian(V, N, K, n, P_tot, P_init, Q, M, allS);
     T_price(i) = exp(-r*T) * V;
@@ -70,10 +70,10 @@ end
 % Plot results for visual comparison
 figure;
 subplot(2,1,1);
-plot(sigma_list, T_price, 'o-', 'LineWidth', 2, 'DisplayName', 'Trinomial');
+plot(sigma_list, T_price, 'DisplayName', 'Trinomial'); % o-
 hold on;
-plot(sigma_list, MC_price, 's-', 'LineWidth', 2, 'DisplayName', 'Monte Carlo');
-plot(sigma_list, BS_price, '^-', 'LineWidth', 2, 'DisplayName', 'Black-Scholes');
+plot(sigma_list, MC_price, 'DisplayName', 'Monte Carlo'); % s-
+plot(sigma_list, BS_price, 'DisplayName', 'Black-Scholes'); % ^-
 xlabel('Volatility (\sigma)');
 ylabel('Option Price');
 title('Asian Option Prices vs Volatility');
@@ -87,42 +87,42 @@ ylabel('Variance');
 title('Monte Carlo Variance vs Volatility');
 grid on;
 
-% % AsianCall function for Monte Carlo simulation
-% function AC = AsianCall(S0, K, r, T, sigma, N, reps)
-%     dt = T/N;
-%     R = exp(-r*T);
-%     S = zeros(reps, N);
-%     S(:,1) = S0;
-%     drift = (r - 0.5*sigma^2)*dt;
-% 
-%     for n = 1:reps
-%         for t = 2:N
-%             dW = randn(1)*sqrt(dt);
-%             S(n,t) = S(n,t-1)*exp(drift + sigma*dW);
-%         end
-%         Average(n) = mean(S(n,:));
-%     end
-% 
-%     Payoff = max(Average - K, 0);
-%     AC = R * mean(Payoff);
-% end
+% AsianCall function for Monte Carlo simulation
+function AC = AsianCall(S0, K, r, T, sigma, N, reps)
+    dt = T/N;
+    R = exp(-r*T);
+    S = zeros(reps, N);
+    S(:,1) = S0;
+    drift = (r - 0.5*sigma^2)*dt;
 
-% % RecursiveAsian function for trinomial model
-% function [V, P_tot] = RecursiveAsian(V, N, K, n, P_tot, P, Q, M, allS)
-%     allS_prev = allS;
-%     S_prev = allS(end);
-%     P_prev = P;
-% 
-%     for i = 1:3
-%         allS = [allS_prev, S_prev * exp(M(i))];
-%         P = P_prev * Q(i);
-% 
-%         if n == N
-%             P_tot = P_tot + P;
-%             % Calculate payoff using arithmetic average
-%             V = V + P * max(mean(allS(2:end)) - K, 0);
-%         else
-%             [V, P_tot] = RecursiveAsian(V, N, K, n+1, P_tot, P, Q, M, allS);
-%         end
-%     end
-% end
+    for n = 1:reps
+        for t = 2:N
+            dW = randn(1)*sqrt(dt);
+            S(n,t) = S(n,t-1)*exp(drift + sigma*dW);
+        end
+        Average(n) = mean(S(n,:));
+    end
+
+    Payoff = max(Average - K, 0);
+    AC = R * mean(Payoff);
+end
+
+% RecursiveAsian function for trinomial model
+function [V, P_tot] = RecursiveAsian(V, N, K, n, P_tot, P, Q, M, allS)
+    allS_prev = allS;
+    S_prev = allS(end);
+    P_prev = P;
+
+    for i = 1:3
+        allS = [allS_prev, S_prev * exp(M(i))];
+        P = P_prev * Q(i);
+
+        if n == N
+            P_tot = P_tot + P;
+            % Calculate payoff using arithmetic average
+            V = V + P * max(mean(allS(2:end)) - K, 0);
+        else
+            [V, P_tot] = RecursiveAsian(V, N, K, n+1, P_tot, P, Q, M, allS);
+        end
+    end
+end

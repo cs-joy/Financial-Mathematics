@@ -16,7 +16,7 @@ function price = AmericanPerpetualPut(S, K, r, sigma, q)
     term1 = (r - q) / sigma^2;
     term2 = (term1 - 0.5)^2 + (2*r) / sigma^2;
     h2 = 0.5 - term1 - sqrt(term2);
-    fprintf('h2: %.4f', h2);
+    fprintf('h2: %.4f\n', h2);
     
     %% calculate the perpetual put price
     if h2 == 1
