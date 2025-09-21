@@ -18,16 +18,68 @@ public class Asian {
     private final double[] probabilities;
     private final double[] moves;
     private final int totalSteps;
+    private final boolean isCall;
     private final ConcurrentHashMap<PathState, Double> memo = new ConcurrentHashMap<>();
     private final ForkJoinPool forkJoinPool;
 
     public Asian(double strike, double[] probabilities, double[] moves,
-                             int totalSteps, int parallelism) {
+                             int totalSteps, boolean isCall, int parallelism) {
         this.strike = strike;
         this.probabilities = probabilities;
         this.moves = moves;
         this.totalSteps = totalSteps;
+        this.isCall = isCall;
         this.forkJoinPool = new ForkJoinPool(parallelism);
+    }
+
+    public static double calculateAsianOption(boolean isCall, double S0, double K, double r, double sigma, double T, int N, double p) {
+        double price = 0.0;
+        int parallelism = Runtime.getRuntime().availableProcessors();
+
+        // Calculate parameters
+        double h = T / N;
+        double u = sigma * Math.sqrt(h/(2*p));
+
+        double q0 = 1 - 2 * p;
+        double denominator = Math.exp(u) - Math.exp(-u);
+        double qu = (Math.exp(r * h) - Math.exp(-u) - q0 * (1 - Math.exp(-u))) / denominator;
+        double qd = (Math.exp(u) - Math.exp(r * h) - q0 * (Math.exp(u) - 1)) / denominator;
+
+        // Verify probabilities sum to 1
+        double sumProb = qu + q0 + qd;
+        double tolerance = 1e-10;
+        if (Math.abs(sumProb - 1.0) > tolerance) {
+            throw new RuntimeException("Probabilities do not sum to 1. Sum: " + sumProb);
+        }
+
+        double[] Q = {qu, q0, qd};   // Risk-neutral probabilities
+        double[] M = {u, 0, -u};     // Moves: up, same, down
+
+        System.out.println("Calculating Asian option price...");
+        System.out.println("N: " + N + ", Parallelism: " + parallelism);
+        System.out.printf("Probabilities: qu=%.6f, q0=%.6f, qd=%.6f%n", qu, q0, qd);
+
+        try {
+            Asian pricer = new Asian(K, Q, M, N, isCall, parallelism);
+
+            long startTime = System.currentTimeMillis();
+
+            price = pricer.calculatePrice(S0, r, T);
+
+
+            long endTime = System.currentTimeMillis();
+
+            System.out.printf("Asian Option Price: %.4f%n", price);
+            System.out.printf("Calculation time: %d ms%n", (endTime - startTime));
+
+            pricer.shutdown();
+
+        } catch (Exception e) {
+            System.err.println("Error calculating price: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return price;
     }
 
     public double calculatePrice(double initialPrice, double riskFreeRate, double timeToMaturity) {
@@ -68,7 +120,14 @@ public class Asian {
             if (currentStep == totalSteps) {
                 // Base case: at maturity
                 double averagePrice = (runningSum + currentPrice) / (count + 1);
-                double payoff = Math.max(averagePrice - strike, 0);
+                double payoff = 0.0;
+                if (isCall) {
+                    //System.out.println("i'm here..");
+                    payoff = Math.max(averagePrice - strike, 0);
+                } else {
+                    //System.out.println("im there..");
+                    payoff = Math.max(strike-averagePrice, 0);
+                }
                 memo.put(state, payoff);
                 return payoff;
             }

@@ -9,9 +9,8 @@ p = 0.25;    % Probability for up/down (p_u = p_d = p)
 N = 11;
 
 h = T / N;   % Time step
-    
-% calculate u: we use u = sigma * sqrt(h) (as in the paper for convergence)
-u = sigma * sqrt(h);
+u = sigma * sqrt(h/(2*p)); % up factor % h/2p->0.0212 h>0.0150
+fprintf("u= %.4f\n", u);
 
 q0 = 1 - 2*p;
 qu = (exp(r*h) - exp(-u) - q0*(1 - exp(-u))) / (exp(u) - exp(-u));

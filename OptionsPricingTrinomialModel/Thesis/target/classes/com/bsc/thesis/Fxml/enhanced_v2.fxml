@@ -206,13 +206,11 @@
                                 <Text text="Asian Price:" GridPane.columnIndex="0" styleClass="input-label"/>
                                 <TextField fx:id="asianPriceField" GridPane.columnIndex="1" styleClass="input-field"/>
                                 <Text text="asian Type:" GridPane.columnIndex="2" styleClass="input-label"/>
-                                <ComboBox fx:id="asianypeComboBox" GridPane.columnIndex="3" styleClass="combo-box">
+                                <ComboBox fx:id="asianTypeComboBox" GridPane.columnIndex="3" styleClass="combo-box">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Down-and-Out"/>
-                                            <String fx:value="Down-and-In"/>
-                                            <String fx:value="Up-and-Out"/>
-                                            <String fx:value="Up-and-In"/>
+                                            <String fx:value="Call Option"/>
+                                            <String fx:value="Put Option"/>
                                         </FXCollections>
                                     </items>
                                 </ComboBox>

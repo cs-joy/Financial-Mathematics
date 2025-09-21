@@ -1,6 +1,7 @@
 package com.bsc.thesis;
 
 import com.bsc.thesis.Options.Exotic;
+import com.bsc.thesis.Options.exotic.Asian;
 import com.bsc.thesis.Options.vanilla.American;
 import com.bsc.thesis.Options.vanilla.European;
 import javafx.collections.FXCollections;
@@ -49,6 +50,7 @@ public class ApplicationController {
     @FXML private VBox lookbackParams;
 
     @FXML private TextField barrierPriceField;
+    @FXML private ComboBox<String> asianTypeComboBox;
     @FXML private ComboBox<String> barrierTypeComboBox;
     @FXML private TextField numPeriodsField;
     @FXML private TextField localCapField;
@@ -97,6 +99,11 @@ public class ApplicationController {
         // Set up barrier type combo box
         barrierTypeComboBox.setItems(FXCollections.observableArrayList(
                 "Down-and-Out", "Down-and-In", "Up-and-Out", "Up-and-In"
+        ));
+
+        // set asin type
+        asianTypeComboBox.setItems(FXCollections.observableArrayList(
+                "Call Option", "Put Option"
         ));
 
         // Calculate time step and up factor when parameters change
@@ -246,13 +253,12 @@ public class ApplicationController {
             System.out.println("optionType: "+optionType);
             double result = 0.0;
             String PricingMethod = "";
-            new European(K);
 
             // Calculate based on option type
             switch (optionType) {
 
                 case "European Call":
-                    result = European.calculateEuropeanOptions(true, S0, N, u, r, p, h);
+                    result = new European(K).calculateEuropeanOptions(true, S0, N, u, r, p, h);
                     PricingMethod = "Trinomial Tree";
                     break;
                 case "European Put":
@@ -270,8 +276,20 @@ public class ApplicationController {
                     PricingMethod = "Trinomial Tree";
                     break;
                 case "Asian Option":
-                    result = Exotic.calculateAsianCall(S0, K, r, N, h, u, sigma);
-                    PricingMethod = "Asian Arithmetic Average (Trinomial Tree)";
+                    String asianType = asianTypeComboBox.getValue();
+                    System.out.println("asinType: "+asianType);
+                    if (asianType != null) {
+                        if (asianType.equals("Call Option")) {
+                            result = Asian.calculateAsianOption(true, S0, K, r, sigma, T, N, p);
+                            PricingMethod = "Asian Arithmetic Average (Trinomial Tree) Call Option";
+                        } else {
+                            result = Asian.calculateAsianOption(false, S0, K, r, sigma, T, N, p);
+                            PricingMethod = "Asian Arithmetic Average (Trinomial Tree) Put Option";
+                        }
+                    }
+                    //result = Asian.calculateAsianOption(S0, K, r, sigma, T, N, p);
+                    //result = Exotic.calculateAsianCall(S0, K, r, N, h, u, sigma);
+                    //PricingMethod = "Asian Arithmetic Average (Trinomial Tree)";
                     break;
                 case "Barrier Option":
                     double barrier = Double.parseDouble(barrierPriceField.getText());
