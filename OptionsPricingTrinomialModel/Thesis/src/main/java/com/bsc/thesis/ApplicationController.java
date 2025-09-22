@@ -255,72 +255,75 @@ public class ApplicationController {
             String PricingMethod = "";
 
             // Calculate based on option type
-            switch (optionType) {
+            if (optionType != null) {
+                switch (optionType) {
 
-                case "European Call":
-                    result = new European(K).calculateEuropeanOptions(true, S0, N, u, r, p, h);
-                    PricingMethod = "Trinomial Tree";
-                    break;
-                case "European Put":
-                    result = European.calculateEuropeanOptions(false, S0, N, u, r, p, h);
-                    PricingMethod = "Trinomial Tree";
-                    break;
-                case "American Call":
-                    double p1 = Math.random();
-                    result = 0.0;
-                    PricingMethod = "Trinomial Tree";
-                    break;
-                case "American Put":
-                    //double p = Math.random();
-                    result = new American(K).calculateAmericanOptions(S0, N, r, p, sigma);
-                    PricingMethod = "Trinomial Tree";
-                    break;
-                case "Asian Option":
-                    String asianType = asianTypeComboBox.getValue();
-                    System.out.println("asinType: "+asianType);
-                    if (asianType != null) {
-                        if (asianType.equals("Call Option")) {
-                            result = Asian.calculateAsianOption(true, S0, K, r, sigma, T, N, p);
-                            PricingMethod = "Asian Arithmetic Average (Trinomial Tree) Call Option";
+                    case "European Call":
+                        result = new European(K).calculateEuropeanOptions(true, S0, N, u, r, p, h);
+                        PricingMethod = "Trinomial Tree";
+                        break;
+                    case "European Put":
+                        result = European.calculateEuropeanOptions(false, S0, N, u, r, p, h);
+                        PricingMethod = "Trinomial Tree";
+                        break;
+                    case "American Call":
+                        double p1 = Math.random();
+                        result = 0.0;
+                        PricingMethod = "Trinomial Tree";
+                        break;
+                    case "American Put":
+                        result = new American(K).calculateAmericanOptions(S0, N, r, p, sigma);
+                        PricingMethod = "Trinomial Tree";
+                        break;
+                    case "Asian Option":
+                        String asianType = asianTypeComboBox.getValue();
+                        System.out.println("asinType: "+asianType);
+                        if (asianType != null) {
+                            if (asianType.equals("Call Option")) {
+                                result = Asian.calculateAsianOption(true, S0, K, r, T, sigma, p, N);
+                                PricingMethod = "Asian Arithmetic Average (Trinomial Tree)\nOptionType: Call Option";
+                            } else {
+                                result = Asian.calculateAsianOption(false, S0, K, r, T, sigma, p, N);
+                                PricingMethod = "Asian Arithmetic Average (Trinomial Tree)\nOptionType: Put Option";
+                            }
                         } else {
-                            result = Asian.calculateAsianOption(false, S0, K, r, sigma, T, N, p);
-                            PricingMethod = "Asian Arithmetic Average (Trinomial Tree) Put Option";
+                            System.out.println("please choose an option type!");
+                            showError("Maybe you forgot to choose an Option Type\n");
                         }
-                    }
-                    //result = Asian.calculateAsianOption(S0, K, r, sigma, T, N, p);
-                    //result = Exotic.calculateAsianCall(S0, K, r, N, h, u, sigma);
-                    //PricingMethod = "Asian Arithmetic Average (Trinomial Tree)";
-                    break;
-                case "Barrier Option":
-                    double barrier = Double.parseDouble(barrierPriceField.getText());
-                    String barrierType = barrierTypeComboBox.getValue();
-                    result = calculateBarrierOption(S0, K, barrier, r, N, h, u, sigma, barrierType);
-                    PricingMethod = "Barrier Option (" + barrierType + ") - Trinomial Tree";
-                    break;
-                case "Cliquet Option":
-                    int numPeriods = Integer.parseInt(numPeriodsField.getText());
-                    double localCap = Double.parseDouble(localCapField.getText());
-                    double localFloor = Double.parseDouble(localFloorField.getText());
-                    result = Exotic.calculateCliquetOption(S0, K, localCap, localFloor, 0.3, -0.3, r, T, sigma, numPeriods);
-                    PricingMethod = "Cliquet Option - Monte Carlo Simulation";
-                    break;
-                case "Compound Option":
-                    double K1 = Double.parseDouble(compoundStrikeField.getText());
-                    double T1 = Double.parseDouble(compoundMaturityField.getText());
-                    result = Exotic.calculateCompoundOption(S0, K1, K, r, T1, T, sigma, true);
-                    PricingMethod = "Compound Option (Call on Call) - Analytical";
-                    break;
-                case "Lookback Option":
-                    result = Exotic.calculateLookbackCall(S0, r, N, h, u, sigma);
-                    PricingMethod = "Lookback Option (Floating Strike) - Trinomial Tree";
-                    break;
-                case "Bermudan Option":
-                    int[] exerciseDates = parseExerciseDates(exerciseDatesField.getText());
-                    result = Exotic.calculateBermudanPut(S0, K, r, N, h, u, sigma, exerciseDates);
-                    PricingMethod = "Bermudan Option - Trinomial Tree with Early Exercise";
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown option type: " + optionType);
+                        break;
+                    case "Barrier Option":
+                        double barrier = Double.parseDouble(barrierPriceField.getText());
+                        String barrierType = barrierTypeComboBox.getValue();
+                        result = calculateBarrierOption(S0, K, barrier, r, N, h, u, sigma, barrierType);
+                        PricingMethod = "Barrier Option (" + barrierType + ") - Trinomial Tree";
+                        break;
+                    case "Cliquet Option":
+                        int numPeriods = Integer.parseInt(numPeriodsField.getText());
+                        double localCap = Double.parseDouble(localCapField.getText());
+                        double localFloor = Double.parseDouble(localFloorField.getText());
+                        result = Exotic.calculateCliquetOption(S0, K, localCap, localFloor, 0.3, -0.3, r, T, sigma, numPeriods);
+                        PricingMethod = "Cliquet Option - Monte Carlo Simulation";
+                        break;
+                    case "Compound Option":
+                        double K1 = Double.parseDouble(compoundStrikeField.getText());
+                        double T1 = Double.parseDouble(compoundMaturityField.getText());
+                        result = Exotic.calculateCompoundOption(S0, K1, K, r, T1, T, sigma, true);
+                        PricingMethod = "Compound Option (Call on Call) - Analytical";
+                        break;
+                    case "Lookback Option":
+                        result = Exotic.calculateLookbackCall(S0, r, N, h, u, sigma);
+                        PricingMethod = "Lookback Option (Floating Strike) - Trinomial Tree";
+                        break;
+                    case "Bermudan Option":
+                        int[] exerciseDates = parseExerciseDates(exerciseDatesField.getText());
+                        result = Exotic.calculateBermudanPut(S0, K, r, N, h, u, sigma, exerciseDates);
+                        PricingMethod = "Bermudan Option - Trinomial Tree with Early Exercise";
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown option type: " + optionType);
+                }
+            } else {
+                System.out.println("please choose an option type!");
             }
 
             lastCalculatedPrice = result;

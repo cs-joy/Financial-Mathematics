@@ -41,7 +41,7 @@ function [V P_tot]=RecursiveAsian(V,N,K,n,P_tot,P,Q,M,allS)
             % V = V + ...: Adds this probability-weighted payoff to the running total option value V. 
             % At the end of the recursion, V will be the sum of the discounted expected payoff, 
             % but note: this function calculates the `undiscounted expected` payoff.
-            V=V+P*max(A_n- K,0);
+            V=V+P*max(K - A_n,0);
             % To get the present value (fair price), it must be discounted by the risk-free rate
             % Price = exp(-r * T) * V
         else %     If it's not the final time step (n < N), the function calls itself 

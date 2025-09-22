@@ -1,6 +1,6 @@
 % Parameters from the paper (Table 5.1)
-S0 = 10;
-K = 8;
+S0 = 8;
+K = 10;
 r = 0.01;
 T = 0.062;   % Time to maturity
 sigma = 0.2;
