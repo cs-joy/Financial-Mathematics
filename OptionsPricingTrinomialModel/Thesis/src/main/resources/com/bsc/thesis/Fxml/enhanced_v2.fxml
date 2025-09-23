@@ -11,7 +11,7 @@
 <!--stylesheets="@../css/enl.css"-->
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.bsc.thesis.ApplicationController"
-            prefHeight="800" prefWidth="1200">
+            prefHeight="1000" prefWidth="1200">
 
     <!-- Top Navigation Bar -->
     <top>
@@ -24,7 +24,7 @@
                 <Image url="@../images/logo.png" />
             </ImageView>
 
-            <Text text="ThalesZ Options" styleClass="app-title"/>
+            <Text text="ThalesZ Options Pricing Tool" styleClass="app-title"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
@@ -48,7 +48,7 @@
         <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="main-scroll">
             <VBox spacing="0" styleClass="main-container">
 
-                <!-- Welcome Banner -->
+                <!-- Welcome, Banner -->
                 <HBox styleClass="welcome-banner" alignment="CENTER">
                     <VBox spacing="5" alignment="CENTER">
                         <Text text="Professional Options Pricing Platform" styleClass="banner-title"/>
@@ -98,12 +98,13 @@
                             <FXCollections fx:factory="observableArrayList">
                                 <String fx:value="European Call"/>
                                 <String fx:value="European Put"/>
-                                <String fx:value="American Call"/>
+
                                 <String fx:value="American Put"/>
+
                                 <String fx:value="Asian Option"/>
-                                <String fx:value="Barrier Option"/>
                                 <String fx:value="Cliquet Option"/>
                                 <String fx:value="Compound Option"/>
+                                <String fx:value="Barrier Option"/>
                                 <String fx:value="Lookback Option"/>
                                 <String fx:value="Bermudan Option"/>
                             </FXCollections>
@@ -115,7 +116,7 @@
                     <TextField fx:id="stockPriceField" styleClass="input-field"
                                GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                    <Text text="Strike Price (K):" styleClass="input-label"
+                    <Text fx:id="CK" text="Strike Price (K):" styleClass="input-label"
                           GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                     <TextField fx:id="strikePriceField" styleClass="input-field"
                                GridPane.columnIndex="1" GridPane.rowIndex="3"/>
@@ -198,13 +199,14 @@
                         <VBox fx:id="asianParams" styleClass="exotic-subsection">
                             <GridPane hgap="15" vgap="10">
                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="120"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="150"/>
                                     <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="120"/>
                                     <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
                                 </columnConstraints>
                                 <Text text="Asian Price:" GridPane.columnIndex="0" styleClass="input-label"/>
                                 <TextField fx:id="asianPriceField" GridPane.columnIndex="1" styleClass="input-field"/>
+
                                 <Text text="asian Type:" GridPane.columnIndex="2" styleClass="input-label"/>
                                 <ComboBox fx:id="asianTypeComboBox" GridPane.columnIndex="3" styleClass="combo-box">
                                     <items>
@@ -250,20 +252,38 @@
                                     <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="120"/>
                                     <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="120"/>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
                                 </columnConstraints>
-                                <Text text="Compound Price:" GridPane.columnIndex="0" styleClass="input-label"/>
-                                <TextField fx:id="compoundPriceField" GridPane.columnIndex="1" styleClass="input-field"/>
-                                <Text text="Compound Type:" GridPane.columnIndex="2" styleClass="input-label"/>
-                                <ComboBox fx:id="compoundTypeComboBox" GridPane.columnIndex="3" styleClass="combo-box">
+                                <rowConstraints>
+                                    <RowConstraints vgrow="SOMETIMES" minHeight="5"/>
+                                    <RowConstraints vgrow="SOMETIMES" minHeight="40"/>
+                                </rowConstraints>
+                                <!-- Row 1 -->
+                                <!-- Column 1 -->
+                                <Text text="Compound Strike Price(K1):" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="input-label"/>
+                                <TextField fx:id="compoundStrikeField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="input-field"/>
+
+                                <Text text="Underlying Strike Price (K2):" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="input-label"/>
+                                <TextField fx:id="underlyingStrikeField" GridPane.columnIndex="3" GridPane.rowIndex="0" styleClass="input-field"/>
+                                <Text text="Compound Type:" GridPane.columnIndex="4" styleClass="input-label"/>
+                                <ComboBox fx:id="compoundTypeComboBox" GridPane.columnIndex="5" GridPane.rowIndex="0" styleClass="combo-box">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Call-in-Call"/>
-                                            <String fx:value="Call-in-Put"/>
-                                            <String fx:value="Put-in-Call"/>
-                                            <String fx:value="Put-in-Put"/>
+                                            <String fx:value="CoC"/>
+                                            <String fx:value="CoP"/>
+                                            <String fx:value="PoC"/>
+                                            <String fx:value="PoP"/>
                                         </FXCollections>
                                     </items>
                                 </ComboBox>
+                                <!-- Row 2 -->
+                                <Text text="Compound Maturity (T1):" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="input-label"/>
+                                <TextField fx:id="compoundMaturityField" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="input-field"/>
+
+                                <Text text="Underlying Maturity (T2):" GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="input-label"/>
+                                <TextField fx:id="underlyingMaturityField" GridPane.columnIndex="3" GridPane.rowIndex="1" styleClass="input-field"/>
+                                <!-- Row 2 end -->
                             </GridPane>
                         </VBox>
 

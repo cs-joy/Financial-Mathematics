@@ -2,6 +2,7 @@ package com.bsc.thesis;
 
 import com.bsc.thesis.Options.Exotic;
 import com.bsc.thesis.Options.exotic.Asian;
+import com.bsc.thesis.Options.exotic.Compound;
 import com.bsc.thesis.Options.vanilla.American;
 import com.bsc.thesis.Options.vanilla.European;
 import javafx.collections.FXCollections;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.bsc.thesis.Options.exotic.Compound.calculateCompoundOption;
 
 public class ApplicationController {
 
@@ -50,13 +53,19 @@ public class ApplicationController {
     @FXML private VBox lookbackParams;
 
     @FXML private TextField barrierPriceField;
+
+    // get type of the different option
     @FXML private ComboBox<String> asianTypeComboBox;
+    @FXML private ComboBox<String> compoundTypeComboBox;
+
     @FXML private ComboBox<String> barrierTypeComboBox;
     @FXML private TextField numPeriodsField;
     @FXML private TextField localCapField;
     @FXML private TextField localFloorField;
     @FXML private TextField compoundStrikeField;
+    @FXML private TextField underlyingStrikeField;
     @FXML private TextField compoundMaturityField;
+    @FXML private TextField underlyingMaturityField;
     @FXML private TextField exerciseDatesField;
 
     // Action buttons and results
@@ -101,9 +110,14 @@ public class ApplicationController {
                 "Down-and-Out", "Down-and-In", "Up-and-Out", "Up-and-In"
         ));
 
-        // set asin type
+        // set asian type
         asianTypeComboBox.setItems(FXCollections.observableArrayList(
                 "Call Option", "Put Option"
+        ));
+
+        // set compound type
+        compoundTypeComboBox.setItems(FXCollections.observableArrayList(
+                "CoC", "CoP", "PoC", "PoP"
         ));
 
         // Calculate time step and up factor when parameters change
@@ -215,6 +229,9 @@ public class ApplicationController {
                     break;
                 case "Compound Option":
                     if (compoundParams != null) {
+                        strikePriceField.setDisable(true); // disable existing strike price field
+                        timeToMaturityField.setDisable(true); // maturity field disable
+
                         compoundParams.setVisible(true);
                         compoundParams.setManaged(true);
                     }
@@ -305,10 +322,32 @@ public class ApplicationController {
                         PricingMethod = "Cliquet Option - Monte Carlo Simulation";
                         break;
                     case "Compound Option":
+                        String compoundType = compoundTypeComboBox.getValue();
+
                         double K1 = Double.parseDouble(compoundStrikeField.getText());
+                        double K2 = Double.parseDouble(underlyingStrikeField.getText());
+
                         double T1 = Double.parseDouble(compoundMaturityField.getText());
-                        result = Exotic.calculateCompoundOption(S0, K1, K, r, T1, T, sigma, true);
-                        PricingMethod = "Compound Option (Call on Call) - Analytical";
+                        double T2 = Double.parseDouble(underlyingMaturityField.getText());
+
+                        if (compoundType != null) {
+                            switch (compoundType) {
+                                case "CoC" ->
+                                        result = Compound.calculateCompoundOption(true, true, S0, K1, K2, T1, T2, r, sigma, p, N);
+                                case "CoP" ->
+                                        result = Compound.calculateCompoundOption(true, false, S0, K1, K2, T1, T2, r, sigma, p, N);
+                                case "PoC" ->
+                                        result = Compound.calculateCompoundOption(false, true, S0, K1, K2, T1, T2, r, sigma, p, N);
+                                case "PoP" ->
+                                        result = Compound.calculateCompoundOption(false, false, S0, K1, K2, T1, T2, r, sigma, p, N);
+                                default -> System.out.println("not valid type");
+                            }
+                        } else {
+                            showError("Please choose valid Compound Type");
+                            System.out.println("choose valid compound type!"); // for debugging
+                        }
+
+                        PricingMethod = "Compound Option\ncompoundType: " + compoundType + "\nMethod - Trinomial model";
                         break;
                     case "Lookback Option":
                         result = Exotic.calculateLookbackCall(S0, r, N, h, u, sigma);
