@@ -15,7 +15,7 @@ function P = BarrierOptionDOCTMP(T, S0, K, r, sigma, p, N, B)
     u = sigma * sqrt(h/(2*p));
 
     %xb= number of steps down to reach barrier
-    xb = floor(log(S0/B)/u);  % "std error" using round()=0.254286, so round() is better than floor()
+    xb = round(log(S0/B)/u);  % "std error" using round()=0.254286, so round() is better than floor()
                               % "std error" using floor()=0.383078
     %fprintf('xb= %.4f\n', xb);
 

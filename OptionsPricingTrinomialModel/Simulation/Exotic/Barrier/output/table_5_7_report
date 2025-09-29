@@ -1,0 +1,101 @@
+TABLE 5.7 COMPUTATIONAL TIME ANALYSIS
+=====================================
+
+Generating Table 5.7: Computational Times Comparison
+===================================================
+
+Parameters: T=30/365, r=0.05, S0=100, K=70, sigma=0.2, p=1/6
+Running 1000 simulations for each combination...
+
+Performing warm-up runs to avoid JIT compilation delays...
+Starting computational time measurements...
+
+Processing N = 10:
+  Barrier B = 85... Trinomial: 13.4 μs, BS: 32.8 μs, Diff: -59.02%
+  Barrier B = 88... Trinomial: 11.5 μs, BS: 33.3 μs, Diff: -65.40%
+  Barrier B = 91... Trinomial: 8.6 μs, BS: 35.2 μs, Diff: -75.63%
+  Barrier B = 94... Trinomial: 7.9 μs, BS: 32.6 μs, Diff: -75.70%
+  Barrier B = 97... Trinomial: 6.9 μs, BS: 30.4 μs, Diff: -77.22%
+
+Processing N = 20:
+  Barrier B = 85... Trinomial: 14.3 μs, BS: 31.1 μs, Diff: -54.13%
+  Barrier B = 88... Trinomial: 14.2 μs, BS: 31.5 μs, Diff: -54.95%
+  Barrier B = 91... Trinomial: 12.9 μs, BS: 29.8 μs, Diff: -56.87%
+  Barrier B = 94... Trinomial: 8.1 μs, BS: 17.2 μs, Diff: -53.05%
+  Barrier B = 97... Trinomial: 11.2 μs, BS: 25.6 μs, Diff: -56.20%
+
+Processing N = 30:
+  Barrier B = 85... Trinomial: 12.6 μs, BS: 16.8 μs, Diff: -24.95%
+  Barrier B = 88... Trinomial: 11.8 μs, BS: 21.6 μs, Diff: -45.72%
+  Barrier B = 91... Trinomial: 11.8 μs, BS: 20.2 μs, Diff: -41.61%
+  Barrier B = 94... Trinomial: 11.1 μs, BS: 29.1 μs, Diff: -61.73%
+  Barrier B = 97... Trinomial: 18.0 μs, BS: 30.7 μs, Diff: -41.20%
+
+Processing N = 40:
+  Barrier B = 85... Trinomial: 25.3 μs, BS: 17.7 μs, Diff: 42.90%
+  Barrier B = 88... Trinomial: 21.2 μs, BS: 20.3 μs, Diff: 4.61%
+  Barrier B = 91... Trinomial: 25.7 μs, BS: 20.5 μs, Diff: 25.79%
+  Barrier B = 94... Trinomial: 17.8 μs, BS: 22.3 μs, Diff: -20.37%
+  Barrier B = 97... Trinomial: 16.5 μs, BS: 18.3 μs, Diff: -9.64%
+
+Processing N = 50:
+  Barrier B = 85... Trinomial: 30.7 μs, BS: 17.3 μs, Diff: 77.00%
+  Barrier B = 88... Trinomial: 32.6 μs, BS: 18.2 μs, Diff: 78.55%
+  Barrier B = 91... Trinomial: 26.4 μs, BS: 17.1 μs, Diff: 54.66%
+  Barrier B = 94... Trinomial: 27.3 μs, BS: 27.5 μs, Diff: -0.51%
+  Barrier B = 97... Trinomial: 27.4 μs, BS: 21.2 μs, Diff: 29.30%
+
+
+
+==================================================================================
+                            TABLE 5.7: COMPUTATIONAL TIMES
+==================================================================================
+
+Description:
+------------
+• Trinomial computation times in microseconds (μs)
+• Percentage difference in parentheses: ((Trinomial_Time - BS_Time) / BS_Time) * 100
+• Positive percentage: Trinomial takes longer than Black-Scholes
+• Negative percentage: Black-Scholes takes longer than Trinomial
+• Based on 1000 runs for each combination
+• Computer: 2.3GHz Intel Core i7-4712MQ, 8GB 1600MHz RAM
+
+N      & B=85            & B=88            & B=91            & B=94            & B=97            \\
+----------------------------------------------------------------------------------------------------
+10     & 13.4  μs \\ (-59.02%) & 11.5  μs \\ (-65.40%) & 8.6   μs \\ (-75.63%) & 7.9   μs \\ (-75.70%) & 6.9   μs \\ (-77.22%) \\
+20     & 14.3  μs \\ (-54.13%) & 14.2  μs \\ (-54.95%) & 12.9  μs \\ (-56.87%) & 8.1   μs \\ (-53.05%) & 11.2  μs \\ (-56.20%) \\
+30     & 12.6  μs \\ (-24.95%) & 11.8  μs \\ (-45.72%) & 11.8  μs \\ (-41.61%) & 11.1  μs \\ (-61.73%) & 18.0  μs \\ (-41.20%) \\
+40     & 25.3  μs \\ (42.90 %) & 21.2  μs \\ (4.61  %) & 25.7  μs \\ (25.79 %) & 17.8  μs \\ (-20.37%) & 16.5  μs \\ (-9.64 %) \\
+50     & 30.7  μs \\ (77.00 %) & 32.6  μs \\ (78.55 %) & 26.4  μs \\ (54.66 %) & 27.3  μs \\ (-0.51 %) & 27.4  μs \\ (29.30 %) \\
+
+
+COMPUTATIONAL TIME STATISTICS:
+=============================
+Trinomial Model:
+  Minimum time: 6.92 μs
+  Maximum time: 32.55 μs
+  Average time: 17.01 μs
+  Standard deviation: 7.77 μs
+
+Black-Scholes Model:
+  Minimum time: 16.76 μs
+  Maximum time: 35.22 μs
+  Average time: 24.73 μs
+  Standard deviation: 6.36 μs
+
+Speed Comparison:
+  On average, Black-Scholes is 1.5x slower than trinomial model
+
+Table 5.7 generation completed.
+
+
+ANALYZING TIMING VARIANCE (as mentioned in paper):
+==============================================
+Running 1000 iterations for variance analysis...
+Trinomial timing variance: 122.9089 μs²
+Black-Scholes timing variance: 95.9186 μs²
+Trinomial timing std dev: 11.0864 μs
+Black-Scholes timing std dev: 9.7938 μs
+✗ Variance exceeds 0.1 μs
+
+All computations completed successfully.
